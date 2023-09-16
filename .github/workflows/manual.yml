@@ -6,7 +6,7 @@ on:
 jobs:
   save_and_upload_env:
     runs-on: ubuntu-latest
-    if: contains('/ref/head/main', github.ref)
+    if: contains('refs/heads/main', github.ref)
 
     steps:
     - name: 'Clone Repository'

@@ -15,11 +15,11 @@ jobs:
     - name: 'Save Secrets to File'
       run: |
         echo "${{ secrets.ENV_MASTER }}"
-        echo "${{ secrets.ENV_MASTER }}" > sample.env
+        echo "${{ secrets.ENV_MASTER }}" > sample.env.txt
     
     - name: 'Upload File to Share'
       run: |
-        curl -k -u ${{ secrets.SHARE_USER }}:${{ secrets.SHARE_PASS }} -T ./sample.env \
+        curl -k -u ${{ secrets.SHARE_USER }}:${{ secrets.SHARE_PASS }} -T ./sample.env.txt \
         https://share.vphrase.com/remote.php/dav/files/tiyaskar/
     
     

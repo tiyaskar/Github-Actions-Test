@@ -1,5 +1,8 @@
 name: Test For Secrets to Files
 
+on:
+  workflow_dispatch:
+    
 jobs:
   save_and_upload_env:
     runs-on: ubuntu-latest

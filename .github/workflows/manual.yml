@@ -12,15 +12,18 @@ jobs:
     - name: 'Clone Repository'
       uses: actions/checkout@v2
     
-    - name: 'Save Secrets to File'
-      run: |
-        echo "${{ secrets.ENV_MASTER }}"
-        echo "${{ secrets.ENV_MASTER }}" > sample.env.txt
+    # - name: 'Save Secrets to File'
+    #   run: |
+    #     echo "${{ secrets.ENV_MASTER }}"
+    #     echo "${{ secrets.ENV_MASTER }}" > sample.env.txt
     
-    - name: 'Upload File to Share'
+    # - name: 'Upload File to Share'
+    #   run: |
+    #     curl -k -u ${{ secrets.SHARE_USER }}:${{ secrets.SHARE_PASS }} -T ./sample.env.txt \
+    #     https://share.vphrase.com/remote.php/dav/files/tiyaskar/
+    - name: Test out xmllint
       run: |
-        curl -k -u ${{ secrets.SHARE_USER }}:${{ secrets.SHARE_PASS }} -T ./sample.env.txt \
-        https://share.vphrase.com/remote.php/dav/files/tiyaskar/
+          xmllint --version
     
     
 

@@ -1,4 +1,4 @@
-name: Test For Secrets to Files
+name: Test For xmllint
 
 on:
   workflow_dispatch:

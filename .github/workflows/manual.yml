@@ -11,7 +11,27 @@ jobs:
     steps:
     - name: 'Clone Repository'
       uses: actions/checkout@v2
-    
+
+    - name: Setup Java
+      uses: actions/setup-java@v4.0.0
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+
+    - name: Run Test Cases
+      run: |
+          mvn clean install
+          
+    - name: Read pom.xml file
+      run: |
+        mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                          -Dexpression=project.groupId -q -DforceStdout
+        
+        mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                          -Dexpression=project.artifactId -q -DforceStdout
+        
+        mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                          -Dexpression=project.version -q -DforceStdout
     # - name: 'Save Secrets to File'
     #   run: |
     #     echo "${{ secrets.ENV_MASTER }}"
@@ -21,22 +41,22 @@ jobs:
     #   run: |
     #     curl -k -u ${{ secrets.SHARE_USER }}:${{ secrets.SHARE_PASS }} -T ./sample.env.txt \
     #     https://share.vphrase.com/remote.php/dav/files/tiyaskar/
-    - name: Cache APT packages
-      uses: actions/cache@v2
-      id: cache-apt
-      with:
-        path: /var/cache/apt
-        key: apt-cache-${{ runner.os }}-libxml2-utils
-        restore-keys: |
-          apt-cache-${{ runner.os }}
+    # - name: Cache APT packages
+    #   uses: actions/cache@v2
+    #   id: cache-apt
+    #   with:
+    #     path: /var/cache/apt
+    #     key: apt-cache-${{ runner.os }}-libxml2-utils
+    #     restore-keys: |
+    #       apt-cache-${{ runner.os }}
 
-    - name: Install dependencies
-      if: steps.cache-apt.outputs.cache-hit != 'true'
-      run: |
-        sudo apt-get -y install libxml2-utils
-    - name: Get xmllint version info
-      run: |
-          xmllint --version
+    # - name: Install dependencies
+    #   if: steps.cache-apt.outputs.cache-hit != 'true'
+    #   run: |
+    #     sudo apt-get -y install libxml2-utils
+    # - name: Get xmllint version info
+    #   run: |
+    #       xmllint --version
     
     
 

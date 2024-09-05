@@ -30,7 +30,7 @@ jobs:
     - name: Install libxml2-utils
       if: steps.cache-libxml2-utils.outputs.cache-hit != 'true'
       run: |
-          apt -y install libxml2-utils
+          sudo apt -y install libxml2-utils
     - name: Get xmllint version info
       run: |
           xmllint --version

@@ -24,14 +24,17 @@ jobs:
           
     - name: Read pom.xml file
       run: |
-        mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-                          -Dexpression=project.groupId -q -DforceStdout
+        GROUP_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                          -Dexpression=project.groupId -q -DforceStdout)
         
-        mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-                          -Dexpression=project.artifactId -q -DforceStdout
+        ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                          -Dexpression=project.artifactId -q -DforceStdout)
         
-        mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-                          -Dexpression=project.version -q -DforceStdout
+        VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                          -Dexpression=project.version -q -DforceStdout)
+        echo "Group id of the package is -> $GROUP_ID"
+        echo "Artifact id of the package is -> $ARTIFACT_ID"
+        echo "Version of the package is -> $VERSION"
     # - name: 'Save Secrets to File'
     #   run: |
     #     echo "${{ secrets.ENV_MASTER }}"

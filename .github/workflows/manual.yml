@@ -33,15 +33,14 @@ jobs:
         
         VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
                           -Dexpression=project.version -q -DforceStdout)
-        # echo "GID=$GROUP_ID" >> $GITHUB_OUTPUT
-        echo "$GROUP_ID"
+        echo "GID=$GROUP_ID" >> $GITHUB_OUTPUT
         echo "Artifact id of the package is -> $ARTIFACT_ID"
         echo "Version of the package is -> $VERSION"
 
     - name: Check github output
       if: ${{ steps.read.outputs.GID != '' }}
       run: |
-        echo "Got the GID as => $GID"
+        echo "Got the GID as => ${{ steps.read.outputs.GID }}"
     # - name: 'Save Secrets to File'
     #   run: |
     #     echo "${{ secrets.ENV_MASTER }}"

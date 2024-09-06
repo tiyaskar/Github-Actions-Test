@@ -17,7 +17,7 @@ on:
             - develop
 
 env:
-  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   publish-artifacts:
@@ -43,16 +43,6 @@ jobs:
       - name: Dry Run Build
         run: |
           mvn --batch-mode deploy -Dmaven.deploy.skip=true -DskipTests
-
-      # - name: Running Vulnerability Scan
-      #   usess: aquasecurity/trivy-action@master
-      #   with:
-      #     scan-type: 'fs'
-      #     scan-ref: '.'
-      #     format: 'table'
-      #     exit-code: '0'
-      #     ignore-unfixed: true
-      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
 
       - name: Check for existing Artifacts with same version
         id: check-artifacts

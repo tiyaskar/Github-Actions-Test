@@ -23,6 +23,7 @@ jobs:
     #       mvn clean install
           
     - name: Read pom.xml file
+      id: read
       run: |
         GROUP_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
                           -Dexpression=project.groupId -q -DforceStdout)
@@ -32,9 +33,14 @@ jobs:
         
         VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
                           -Dexpression=project.version -q -DforceStdout)
-        echo "Group id of the package is -> $GROUP_ID"
+        echo "GID=$GROUP_ID" >> $GITHUB_OUTPUT
         echo "Artifact id of the package is -> $ARTIFACT_ID"
         echo "Version of the package is -> $VERSION"
+
+    - name: Check github output
+      if: ${{ step.read.outputs.GID != '' }}
+      run: |
+        echo "Got the GID as => $GID"
     # - name: 'Save Secrets to File'
     #   run: |
     #     echo "${{ secrets.ENV_MASTER }}"

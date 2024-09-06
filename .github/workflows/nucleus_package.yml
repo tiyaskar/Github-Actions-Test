@@ -27,10 +27,10 @@ jobs:
       contents: read
       packages: write
     steps:
-      - use: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4.1.1
 
       - name: Setup Java
-        use: actions/setup-java@v4.0.0
+        uses: actions/setup-java@v4.0.0
         with:
           java-version: '17'
           distribution: 'adopt'
@@ -44,7 +44,7 @@ jobs:
           mvn --batch-mode deploy -Dmaven.deploy.skip=true -DskipTests
 
       # - name: Running Vulnerability Scan
-      #   uses: aquasecurity/trivy-action@master
+      #   usess: aquasecurity/trivy-action@master
       #   with:
       #     scan-type: 'fs'
       #     scan-ref: '.'

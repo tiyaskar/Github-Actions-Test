@@ -2,6 +2,7 @@ name: Publish Artifact
 run-name: Publish Artifact ${{ github.event_name }} event by @${{ github.actor }}
 
 on:
+    workflow_dispatch:
     push:
         branches:
             - main

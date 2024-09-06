@@ -1,0 +1,109 @@
+name: Publish Artifact
+run-name: Publish Artifact ${{ github.event_name }} event by @${{ github.actor }}
+
+on:
+    push:
+        branches:
+            - main
+            - develop
+            - ticket/*
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
+    pull_request:
+        types: [opened, reopened]
+        branches:
+            - main
+            - develop
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+jobs:
+  publish-artifacts:
+    name: Publish Artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    steps:
+      - use: actions/checkout@v4.1.1
+
+      - name: Setup Java
+        use: actions/setup-java@v4.0.0
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Run Test Cases
+        run: |
+          mvn clean install
+
+      - name: Dry Run Build
+        run: |
+          mvn --batch-mode deploy -Dmaven.deploy.skip=true -DskipTests
+
+      # - name: Running Vulnerability Scan
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     scan-type: 'fs'
+      #     scan-ref: '.'
+      #     format: 'table'
+      #     exit-code: '0'
+      #     ignore-unfixed: true
+      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+
+      - name: Check for existing Artifacts with same version
+        id: check-artifacts
+        run: |
+          
+            # Fetch package Version, Artifact id and Group id in pom.xml
+            GROUP_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                          -Dexpression=project.groupId -q -DforceStdout)
+        
+            ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                              -Dexpression=project.artifactId -q -DforceStdout)
+            
+            VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+                              -Dexpression=project.version -q -DforceStdout)
+            
+            # Create package name as per pom file
+            PACKAGE_NAME="$GROUP_ID.$ARTIFACT_ID"
+
+            # Check if version contains "SNAPSHOT"
+            if [[ "$VERSION" == *SNAPSHOT* ]]; then
+              echo "This is a SNAPSHOT version, checking remote versions."
+
+              # Fetch organization name
+              ORG=${{ github.repository_owner }}
+              
+              # Fetch package versions from Remote Registry
+              REMOTE_VERSIONS=$(curl -L \
+                                -H "Accept: application/vnd.github+json" \
+                                -H "Authorization: Bearer ${{env.GITHUB_TOKEN}}" \
+                                -H "X-GitHub-Api-Version: 2022-11-28" \
+                                "https://api.github.com/orgs/${{ github.repository_owner }}/packages/maven/${PACKAGE_NAME}/versions")
+
+              # Check if the Package already exists in Remote Registry
+              if echo "$REMOTE_VERSIONS" | jq -r ".[].name" | grep -q "${VERSION}"; then
+                echo "Found version ${VERSION} already exists in the REMOTE_VERSIONS."
+
+                echo "PACKAGE_VERSION_ID=$(echo "$REMOTE_VERSIONS" | jq -r ".[].id" | grep -q "${VERSION}")" >> $GITHUB_OUTPUT
+                echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+                echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_OUTPUT
+              fi
+            fi
+
+      - name: Delete Package with similar version
+        uses: actions/delete-package-versions@v5
+        if: ${{ steps.check-artifacts.outputs.PACKAGE_VERSION != '' }}
+        with:
+          package-version-ids: ${{steps.check-artifacts.outputs.PACKAGE_VERSION_ID}}
+          package-name: ${{steps.check-artifacts.outputs.PACKAGE_NAME}}
+          package-type: maven
+          token: ${{env.GITHUB_TOKEN}}
+
+      - name: Push Artifacts
+        run: |
+            # Publish Latest Changes to Github Packages.
+            mvn --batch-mode deploy -DskipTests

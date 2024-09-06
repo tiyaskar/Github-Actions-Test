@@ -38,7 +38,7 @@ jobs:
         echo "Version of the package is -> $VERSION"
 
     - name: Check github output
-      if: ${{ step.read.outputs.GID != '' }}
+      if: ${{ steps.read.outputs.GID != '' }}
       run: |
         echo "Got the GID as => $GID"
     # - name: 'Save Secrets to File'

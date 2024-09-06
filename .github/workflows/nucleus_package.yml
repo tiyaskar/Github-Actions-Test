@@ -99,12 +99,13 @@ jobs:
         uses: actions/delete-package-versions@v5
         if: ${{ steps.check-artifacts.outputs.PACKAGE_VERSION != '' }}
         with:
-          package-version-ids: ${{steps.check-artifacts.outputs.PACKAGE_VERSION_ID}}
-          package-name: ${{steps.check-artifacts.outputs.PACKAGE_NAME}}
+          package-version-ids: ${{ steps.check-artifacts.outputs.PACKAGE_VERSION_ID }}
+          package-name: ${{ steps.check-artifacts.outputs.PACKAGE_NAME }}
           package-type: maven
-          token: ${{env.GITHUB_TOKEN}}
+          token: ${{ env.GITHUB_TOKEN }}
 
       - name: Push Artifacts
         run: |
             # Publish Latest Changes to Github Packages.
-            mvn --batch-mode deploy -DskipTests
+            # mvn --batch-mode deploy -DskipTests
+            mvn deploy -Dregistry=https://maven.pkg.github.com/${{ github.repository_owner }}/${GITHUB_REPOSITORY#*/} -Dtoken=${{ env.GITHUB_TOKEN }}

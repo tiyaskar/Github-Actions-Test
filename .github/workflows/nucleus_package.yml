@@ -63,7 +63,7 @@ jobs:
             PACKAGE_NAME="$GROUP_ID.$ARTIFACT_ID"
 
             ##### TEST ##########
-            echo "PACKAGE_VERSION_ID=$(echo "$REMOTE_VERSIONS" | jq -r ".[].id" | grep -q "${VERSION}")"
+            echo "PACKAGE_VERSION_ID=$(echo "$REMOTE_VERSIONS" | jq -r ".[] | select(.name == \"${VERSION}\") | .id")"
             exit 0
             # Check if version contains "SNAPSHOT"
             if [[ "$VERSION" == *SNAPSHOT* ]]; then

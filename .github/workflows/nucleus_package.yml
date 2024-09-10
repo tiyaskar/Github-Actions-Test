@@ -37,13 +37,13 @@ jobs:
           distribution: 'adopt'
           cache: 'maven'
 
-      - name: Run Test Cases
-        run: |
-          mvn clean install
+      # - name: Run Test Cases
+      #   run: |
+      #     mvn clean install
 
-      - name: Dry Run Build
-        run: |
-          mvn --batch-mode deploy -Dmaven.deploy.skip=true -DskipTests
+      # - name: Dry Run Build
+      #   run: |
+      #     mvn --batch-mode deploy -Dmaven.deploy.skip=true -DskipTests
 
       - name: Check for existing Artifacts with same version
         id: check-artifacts
@@ -62,6 +62,9 @@ jobs:
             # Create package name as per pom file
             PACKAGE_NAME="$GROUP_ID.$ARTIFACT_ID"
 
+            ##### TEST ##########
+            echo "PACKAGE_VERSION_ID=$(echo "$REMOTE_VERSIONS" | jq -r ".[].id" | grep -q "${VERSION}")"
+            exit 0
             # Check if version contains "SNAPSHOT"
             if [[ "$VERSION" == *SNAPSHOT* ]]; then
               echo "This is a SNAPSHOT version, checking remote versions."

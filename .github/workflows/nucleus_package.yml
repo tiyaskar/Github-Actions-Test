@@ -62,9 +62,7 @@ jobs:
             # Create package name as per pom file
             PACKAGE_NAME="$GROUP_ID.$ARTIFACT_ID"
 
-            ##### TEST ##########
-            echo "PACKAGE_VERSION_ID=$(echo "$REMOTE_VERSIONS" | jq -r ".[] | select(.name == \"${VERSION}\") | .id")"
-            exit 0
+            
             # Check if version contains "SNAPSHOT"
             if [[ "$VERSION" == *SNAPSHOT* ]]; then
               echo "This is a SNAPSHOT version, checking remote versions."
@@ -80,6 +78,9 @@ jobs:
                                 "https://api.github.com/orgs/${{ github.repository_owner }}/packages/maven/${PACKAGE_NAME}/versions")
               echo "https://api.github.com/orgs/${{ github.repository_owner }}/packages/maven/${PACKAGE_NAME}/versions"
               echo "$REMOTE_VERSIONS"
+              ##### TEST ##########
+              echo "PACKAGE_VERSION_ID=$(echo "$REMOTE_VERSIONS" | jq -r ".[] | select(.name == \"${VERSION}\") | .id")"
+              exit 0
               # Check if the Package already exists in Remote Registry
               if echo "$REMOTE_VERSIONS" | jq -r ".[].name" | grep -q "${VERSION}"; then
                 echo "Found version ${VERSION} already exists in the REMOTE_VERSIONS."
@@ -102,5 +103,4 @@ jobs:
       - name: Push Artifacts
         run: |
             # Publish Latest Changes to Github Packages.
-            # mvn --batch-mode deploy -DskipTests
-            mvn deploy -Dregistry=https://maven.pkg.github.com/${{ github.repository_owner }}/${GITHUB_REPOSITORY#*/} -Dtoken=${{ env.GITHUB_TOKEN }}
+            mvn --batch-mode deploy -DskipTests

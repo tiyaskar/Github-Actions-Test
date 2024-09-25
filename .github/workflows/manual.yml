@@ -10,7 +10,7 @@ jobs:
       id-token: 'write'
       contents: 'write'
       security-events: 'write'
-      actions: 'write'
+      # actions: 'write'
     if: contains('refs/heads/main', github.ref)
 
     steps:

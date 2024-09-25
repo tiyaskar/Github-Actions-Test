@@ -6,41 +6,46 @@ on:
 jobs:
   save_and_upload_env:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: 'write'
+      contents: 'write'
+      security-events: 'write'
+      actions: 'write'
     if: contains('refs/heads/main', github.ref)
 
     steps:
     - name: 'Clone Repository'
       uses: actions/checkout@v2
 
-    - name: Setup Java
-      uses: actions/setup-java@v4.0.0
-      with:
-        java-version: '17'
-        distribution: 'adopt'
+    # - name: Setup Java
+    #   uses: actions/setup-java@v4.0.0
+    #   with:
+    #     java-version: '17'
+    #     distribution: 'adopt'
 
     # - name: Run Test Cases
     #   run: |
     #       mvn clean install
           
-    - name: Read pom.xml file
-      id: read
-      run: |
-        GROUP_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-                          -Dexpression=project.groupId -q -DforceStdout)
+    # - name: Read pom.xml file
+    #   id: read
+    #   run: |
+    #     GROUP_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+    #                       -Dexpression=project.groupId -q -DforceStdout)
         
-        ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-                          -Dexpression=project.artifactId -q -DforceStdout)
+    #     ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+    #                       -Dexpression=project.artifactId -q -DforceStdout)
         
-        VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-                          -Dexpression=project.version -q -DforceStdout)
-        echo "GID=$GROUP_ID" >> $GITHUB_OUTPUT
-        echo "Artifact id of the package is -> $ARTIFACT_ID"
-        echo "Version of the package is -> $VERSION"
+    #     VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+    #                       -Dexpression=project.version -q -DforceStdout)
+    #     echo "GID=$GROUP_ID" >> $GITHUB_OUTPUT
+    #     echo "Artifact id of the package is -> $ARTIFACT_ID"
+    #     echo "Version of the package is -> $VERSION"
 
-    - name: Check github output
-      if: ${{ steps.read.outputs.GID != '' }}
-      run: |
-        echo "Got the GID as => ${{ steps.read.outputs.GID }}"
+    # - name: Check github output
+    #   if: ${{ steps.read.outputs.GID != '' }}
+    #   run: |
+    #     echo "Got the GID as => ${{ steps.read.outputs.GID }}"
     # - name: 'Save Secrets to File'
     #   run: |
     #     echo "${{ secrets.ENV_MASTER }}"
@@ -66,6 +71,21 @@ jobs:
     # - name: Get xmllint version info
     #   run: |
     #       xmllint --version
+    - name: 'Scan docker image'
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        image-ref: docker.io/nginx:latest
+        format: 'sarif'
+        exit-code: '0'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-result.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-result.sarif'
     
     
 

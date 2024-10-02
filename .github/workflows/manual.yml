@@ -99,14 +99,15 @@ jobs:
         sed -i "s|\${api_auth0_audience}|${{env.X_GOOGLE_AUDIENCES}}|g" "$FILE_PATH"
         sed -i "s|\${api_auth0_issuer}|${{env.X_GOOGLE_ISSUER}}|g" "$FILE_PATH"
         sed -i "s|\${api_auth0_jwksUri}|${{env.X_GOOGLE_JWT_URL}}|g" "$FILE_PATH"
+        mv ${{env.OPENSPEC_FILE}} spec.tpl.yaml
     - name: Verify change
       run: |
-        tail -n 20 ./${{env.OPENSPEC_FILE}}
+        tail -n 20 ./spec.tpl.yaml
     - name: upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: openapi2
-        path: openapi2.yml
+        path: spec.tpl.yaml
         overwrite: true
         retention-days: 1
 
@@ -114,7 +115,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: openapi2
-        path: spec.tpl.yaml
+        path: ./
 
     - name: verify download
       run: ls -lahrt

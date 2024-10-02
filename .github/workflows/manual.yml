@@ -87,10 +87,18 @@ jobs:
     #   with:
     #     sarif_file: 'trivy-result.sarif'
     - name: Edit openapi spec file
+      env: 
+       OPENSPEC_FILE: 'openapi2.yml'
+       API_AUTHORIZATIONURL: 'https://abc.com/authorize'
+       X_GOOGLE_AUDIENCES: 'https://abc.com'
+       X_GOOGLE_ISSUER: 'https://abc.com.auth0.com'
+       X_GOOGLE_JWT_URL: 'https://abc.com.auth0.com/.well-known/jwks.json'
       run: |
-        FILE_PATH="$(pwd)/openapi2.yml"
-        NEW_VALUE="https://www.abc.com"
-        sed -i "s|\${api_auth0_authorizationUrl}|$NEW_VALUE|g" "$FILE_PATH" 
+        FILE_PATH='$(pwd)/$OPENSPEC_FILE'
+        sed -i "s|\${api_auth0_authorizationUrl}|$API_AUTHORIZATIONURL|g" "$FILE_PATH"
+        sed -i "s|\${api_auth0_audience}|$X_GOOGLE_AUDIENCES|g" "$FILE_PATH"
+        sed -i "s|\${api_auth0_issuer}|$X_GOOGLE_ISSUER|g" "$FILE_PATH"
+        sed -i "s|\${api_auth0_jwksUri}|$X_GOOGLE_JWT_URL|g" "$FILE_PATH"
     - name: Verify change
       run: |
         tail -n 20 ./openapi2.yml

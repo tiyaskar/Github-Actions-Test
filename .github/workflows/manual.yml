@@ -71,21 +71,28 @@ jobs:
     # - name: Get xmllint version info
     #   run: |
     #       xmllint --version
-    - name: 'Scan docker image'
-      uses: aquasecurity/trivy-action@0.20.0
-      with:
-        image-ref: docker.io/nginx:latest
-        format: 'sarif'
-        exit-code: '0'
-        ignore-unfixed: true
-        vuln-type: 'os,library'
-        severity: 'HIGH,CRITICAL'
-        output: 'trivy-result.sarif'
+    # - name: 'Scan docker image'
+    #   uses: aquasecurity/trivy-action@0.20.0
+    #   with:
+    #     image-ref: docker.io/nginx:latest
+    #     format: 'sarif'
+    #     exit-code: '0'
+    #     ignore-unfixed: true
+    #     vuln-type: 'os,library'
+    #     severity: 'HIGH,CRITICAL'
+    #     output: 'trivy-result.sarif'
 
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: 'trivy-result.sarif'
-    
+    # - name: Upload Trivy scan results to GitHub Security tab
+    #   uses: github/codeql-action/upload-sarif@v2
+    #   with:
+    #     sarif_file: 'trivy-result.sarif'
+    - name: Edit openapi spec file
+      run: |
+        FILE_PATH="$(pwd)/openapi2.yml"
+        NEW_VALUE="https://www.abc.com"
+        sed -i "s|\${api_auth0_authorizationUrl}|$NEW_VALUE|g" "$FILE_PATH" 
+    - name: Verify change
+      run: |
+        tail -n 20 ./openapi2.yml
     
 

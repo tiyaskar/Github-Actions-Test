@@ -96,7 +96,7 @@ jobs:
       run: |
         FILE_PATH='./${{env.OPENSPEC_FILE}}'
         sed -i "s|\${api_auth0_authorizationUrl}|${{env.API_AUTHORIZATIONURL}}|g" "$FILE_PATH"
-        sed -i "s|\${api_auth0_audience}|$((env.X_GOOGLE_AUDIENCES}}|g" "$FILE_PATH"
+        sed -i "s|\${api_auth0_audience}|${{env.X_GOOGLE_AUDIENCES}}|g" "$FILE_PATH"
         sed -i "s|\${api_auth0_issuer}|${{env.X_GOOGLE_ISSUER}}|g" "$FILE_PATH"
         sed -i "s|\${api_auth0_jwksUri}|${{env.X_GOOGLE_JWT_URL}}|g" "$FILE_PATH"
     - name: Verify change

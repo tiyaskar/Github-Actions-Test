@@ -94,7 +94,7 @@ jobs:
        X_GOOGLE_ISSUER: 'https://abc.com.auth0.com'
        X_GOOGLE_JWT_URL: 'https://abc.com.auth0.com/.well-known/jwks.json'
       run: |
-        FILE_PATH='./$OPENSPEC_FILE'
+        FILE_PATH='./${{env.OPENSPEC_FILE}}'
         sed -i "s|\${api_auth0_authorizationUrl}|$API_AUTHORIZATIONURL|g" "$FILE_PATH"
         sed -i "s|\${api_auth0_audience}|$X_GOOGLE_AUDIENCES|g" "$FILE_PATH"
         sed -i "s|\${api_auth0_issuer}|$X_GOOGLE_ISSUER|g" "$FILE_PATH"

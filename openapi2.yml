@@ -1,0 +1,910 @@
+swagger: '2.0'
+info:
+  description: Program API
+  title: Program API
+  version: '1.0'
+basePath: /
+paths:
+  '/program/registration/{userId}':
+    options:
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      parameters:
+        - format: int64
+          in: path
+          name: userId
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProgramRegistrationRequestDTO'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProgramRegistrationResponseDTO'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-registration-controller
+      operationId: register_1
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      parameters:
+        - format: int64
+          in: path
+          name: userId
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProgramRegistrationRequestDTO'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProgramRegistrationResponseDTO'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-registration-controller
+      operationId: register
+  /programs:
+    get:
+      produces:
+        - application/octet-stream
+      parameters:
+        - in: query
+          name: sfIds
+          required: false
+          type: string
+        - in: query
+          name: customerIds
+          required: false
+          type: string
+        - in: query
+          name: campaignIds
+          required: false
+          type: string
+        - in: query
+          name: statuses
+          required: false
+          type: string
+        - in: query
+          name: programTypes
+          required: false
+          type: string
+        - in: query
+          name: isRenewal
+          required: false
+          type: boolean
+        - in: query
+          name: pageable
+          required: true
+          type: object
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/RestPageResponseProgramDto'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: getAll
+    options:
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      parameters:
+        - in: query
+          name: sfIds
+          required: false
+          type: string
+        - in: query
+          name: customerIds
+          required: false
+          type: string
+        - in: query
+          name: campaignIds
+          required: false
+          type: string
+        - in: query
+          name: statuses
+          required: false
+          type: string
+        - in: query
+          name: programTypes
+          required: false
+          type: string
+        - in: query
+          name: isRenewal
+          required: false
+          type: boolean
+        - in: query
+          name: pageable
+          required: true
+          type: object
+        - in: body
+          name: body
+          required: true
+          schema: {}
+      responses:
+        '200':
+          description: OK
+          schema: {}
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: createProgramFrom_1_1
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema: {}
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProgramResponse'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: createProgramFrom
+  '/programs/sf-id/{id}':
+    get:
+      produces:
+        - application/octet-stream
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProgramDto'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: getProgramBySfId
+    options:
+      produces:
+        - application/octet-stream
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProgramDto'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: getProgramBySfId_1
+  '/programs/{id}':
+    get:
+      produces:
+        - application/octet-stream
+      parameters:
+        - format: int64
+          in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProgramDto'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: getProgram
+    options:
+      produces:
+        - application/octet-stream
+      parameters:
+        - format: int64
+          in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProgramDto'
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: getProgram_1
+  '/programs/{id}/custom-questions':
+    options:
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      parameters:
+        - format: int64
+          in: path
+          name: id
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/CustomQuestions'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: customQuestions_1
+    put:
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      parameters:
+        - format: int64
+          in: path
+          name: id
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/CustomQuestions'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          schema: {}
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+        - program-controller
+      operationId: customQuestions
+definitions:
+  CompanyDetailsDTO:
+    properties:
+      annualRevenue:
+        type: string
+      name:
+        type: string
+      size:
+        type: string
+    type: object
+  CustomQuestion:
+    properties:
+      description:
+        type: string
+      optional:
+        type: boolean
+      options:
+        items:
+          type: string
+        type: array
+      placeholder:
+        type: string
+      title:
+        type: string
+      type:
+        enum:
+          - dropdown
+          - string
+          - number
+          - multi_select
+        type: string
+    required:
+      - title
+      - type
+    type: object
+  CustomQuestions:
+    properties:
+      customQuestions:
+        items:
+          $ref: '#/definitions/CustomQuestion'
+        maxItems: 2147483647
+        minItems: 1
+        type: array
+    required:
+      - customQuestions
+    type: object
+  ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  FieldSchema:
+    properties:
+      description:
+        type: string
+      enum:
+        items:
+          type: string
+        type: array
+      format:
+        type: string
+      items:
+        $ref: '#/definitions/ItemsSchema'
+      minItems:
+        format: int32
+        type: integer
+      selectedValue:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      uniqueItems:
+        type: boolean
+    type: object
+  FormJsonSchema:
+    properties:
+      properties:
+        additionalProperties:
+          $ref: '#/definitions/FieldSchema'
+        type: object
+      required:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      type:
+        enum:
+          - object
+        type: string
+    type: object
+  InvalidRequest:
+    allOf:
+      - $ref: '#/definitions/ProgramRequest'
+    required:
+      - bodyContent
+      - campaignId
+      - customerId
+      - endDate
+      - leadGoal
+      - name
+      - programType
+      - sfId
+      - slug
+      - startDate
+      - status
+      - targetSpecification
+    type: object
+  ItemsSchema:
+    properties:
+      enum:
+        items:
+          type: string
+        type: array
+      type:
+        type: string
+    type: object
+  MediaProgramMedia:
+    properties:
+      category:
+        enum:
+          - SPEAKER
+          - POSTER
+        type: string
+      orientation:
+        enum:
+          - PORTRAIT
+          - LANDSCAPE
+        type: string
+      title:
+        maxLength: 155
+        minLength: 0
+        type: string
+      type:
+        enum:
+          - IMAGE
+          - PDF
+        type: string
+      url:
+        maxLength: 1025
+        minLength: 0
+        type: string
+    required:
+      - category
+      - orientation
+      - title
+      - type
+    type: object
+  MediaSyndicationMedia:
+    properties:
+      category:
+        enum:
+          - REDIRECT
+          - DOWNLOAD
+        type: string
+      orientation:
+        enum:
+          - PORTRAIT
+          - LANDSCAPE
+        type: string
+      title:
+        maxLength: 155
+        minLength: 0
+        type: string
+      type:
+        enum:
+          - IMAGE
+          - PDF
+        type: string
+      url:
+        maxLength: 1025
+        minLength: 0
+        type: string
+    required:
+      - category
+      - orientation
+      - title
+      - type
+    type: object
+  Pageable:
+    properties:
+      page:
+        format: int32
+        minimum: 0
+        type: integer
+      size:
+        format: int32
+        minimum: 1
+        type: integer
+      sort:
+        items:
+          type: string
+        type: array
+    type: object
+  ProgramBodyContentDto:
+    properties:
+      contentList:
+        items:
+          $ref: '#/definitions/MediaProgramMedia'
+        type: array
+      formJsonSchema:
+        $ref: '#/definitions/FormJsonSchema'
+      keyTakeaways:
+        items:
+          type: string
+        type: array
+      overview:
+        type: string
+    type: object
+  ProgramBodyContentRequest:
+    properties:
+      contentList:
+        items:
+          $ref: '#/definitions/MediaProgramMedia'
+        type: array
+      keyTakeaways:
+        items:
+          type: string
+        type: array
+      overview:
+        maxLength: 1025
+        minLength: 0
+        type: string
+    required:
+      - contentList
+      - overview
+    type: object
+  ProgramDto:
+    properties:
+      bodyContent:
+        $ref: '#/definitions/ProgramBodyContentDto'
+      campaignId:
+        format: int64
+        type: integer
+      customerId:
+        format: int64
+        type: integer
+      description:
+        type: string
+      endDate:
+        type: string
+      id:
+        format: int64
+        type: integer
+      leadGoal:
+        format: int32
+        type: integer
+      name:
+        type: string
+      previewUrl:
+        type: string
+      programType:
+        enum:
+          - EMAILS
+          - APPOINTMENTS
+          - SYNDICATION
+          - WEBINARS
+          - RESEARCH
+          - DEAL_INTENT
+        type: string
+      renewal:
+        type: boolean
+      sfId:
+        type: string
+      slug:
+        type: string
+      startDate:
+        type: string
+      status:
+        enum:
+          - INITIALISED
+          - ACTIVE
+          - BEING_PREPARED
+          - COMPLETE
+          - ON_HOLD_PER_CUSTOMER
+          - CREDIT_HOLD
+          - CANCELED
+          - TEST
+          - NEEDS_REVIEW
+        type: string
+      targetSpecification:
+        $ref: '#/definitions/TargetSpecification'
+    type: object
+  ProgramRegistrationRequestDTO:
+    properties:
+      customerRequirementsResponse:
+        additionalProperties:
+          type: string
+        type: object
+      programId:
+        format: int64
+        type: integer
+      userDetails:
+        $ref: '#/definitions/UserProfileDTO'
+    required:
+      - customerRequirementsResponse
+      - programId
+      - userDetails
+    type: object
+  ProgramRegistrationResponseDTO:
+    properties:
+      id:
+        format: int64
+        type: integer
+      programId:
+        format: int64
+        type: integer
+      userId:
+        format: int64
+        type: integer
+    type: object
+  ProgramRequest:
+    discriminator: programType
+    properties:
+      bodyContent:
+        $ref: '#/definitions/ProgramBodyContentRequest'
+      campaignId:
+        format: int64
+        type: integer
+      customerId:
+        format: int64
+        type: integer
+      description:
+        maxLength: 255
+        minLength: 0
+        type: string
+      endDate:
+        pattern: '^(0[1-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9]{2})$'
+        type: string
+      leadGoal:
+        format: int32
+        type: integer
+      name:
+        maxLength: 255
+        minLength: 1
+        type: string
+      programType:
+        enum:
+          - EMAILS
+          - APPOINTMENTS
+          - SYNDICATION
+          - WEBINARS
+          - RESEARCH
+          - DEAL_INTENT
+        type: string
+      renewal:
+        type: boolean
+      sfId:
+        maxLength: 55
+        minLength: 0
+        type: string
+      slug:
+        maxLength: 55
+        minLength: 0
+        type: string
+      startDate:
+        pattern: '^(0[1-9]|1[0-2])/([0-2][0-9]|3[0-1])/([0-9]{2})$'
+        type: string
+      status:
+        enum:
+          - INITIALISED
+          - ACTIVE
+          - BEING_PREPARED
+          - COMPLETE
+          - ON_HOLD_PER_CUSTOMER
+          - CREDIT_HOLD
+          - CANCELED
+          - TEST
+          - NEEDS_REVIEW
+        type: string
+      targetSpecification:
+        $ref: '#/definitions/TargetSpecificationRequest'
+    required:
+      - bodyContent
+      - campaignId
+      - customerId
+      - endDate
+      - leadGoal
+      - name
+      - programType
+      - sfId
+      - slug
+      - startDate
+      - status
+      - targetSpecification
+    type: object
+  ProgramResponse:
+    properties:
+      id:
+        format: int64
+        type: integer
+      name:
+        type: string
+      previewUrl:
+        type: string
+      status:
+        enum:
+          - INITIALISED
+          - ACTIVE
+          - BEING_PREPARED
+          - COMPLETE
+          - ON_HOLD_PER_CUSTOMER
+          - CREDIT_HOLD
+          - CANCELED
+          - TEST
+          - NEEDS_REVIEW
+        type: string
+    type: object
+  RestPageResponseProgramDto:
+    properties:
+      content:
+        items:
+          $ref: '#/definitions/ProgramDto'
+        type: array
+      last:
+        type: boolean
+      pageNumber:
+        format: int32
+        type: integer
+      pageSize:
+        format: int32
+        type: integer
+      totalElements:
+        format: int64
+        type: integer
+      totalPages:
+        format: int32
+        type: integer
+    type: object
+  SyndicationRequest:
+    allOf:
+      - $ref: '#/definitions/ProgramRequest'
+      - properties:
+          syndicationContentAsset:
+            $ref: '#/definitions/MediaSyndicationMedia'
+        type: object
+    required:
+      - bodyContent
+      - campaignId
+      - customerId
+      - endDate
+      - leadGoal
+      - name
+      - programType
+      - sfId
+      - slug
+      - startDate
+      - status
+      - syndicationContentAsset
+      - targetSpecification
+    type: object
+  TargetSpecification:
+    properties:
+      criteria:
+        additionalProperties:
+          type: object
+        type: object
+      id:
+        format: int64
+        type: integer
+    type: object
+  TargetSpecificationRequest:
+    properties:
+      criteria:
+        additionalProperties:
+          type: object
+        type: object
+    type: object
+  UserProfileDTO:
+    properties:
+      businessEmailId:
+        type: string
+      company:
+        $ref: '#/definitions/CompanyDetailsDTO'
+      firstName:
+        maxLength: 55
+        minLength: 0
+        pattern: '^(?! )[A-Za-z0-9]+( [A-Za-z0-9]+)*( ?)*$'
+        type: string
+      industry:
+        type: string
+      jobFunction:
+        type: string
+      jobTitle:
+        type: string
+      lastName:
+        maxLength: 55
+        minLength: 0
+        pattern: '^(?! )[A-Za-z0-9]+( [A-Za-z0-9]+)*( ?)*$'
+        type: string
+      managementTitle:
+        type: string
+    required:
+      - businessEmailId
+      - firstName
+      - lastName
+    type: object
+securityDefinitions:
+  auth0_jwk:
+    authorizationUrl: '${api_auth0_authorizationUrl}'
+    flow: implicit
+    scopes: {}
+    type: oauth2
+    x-google-audiences:
+      value: '${api_auth0_audience}'
+    x-google-issuer:
+      value: '${api_auth0_issuer}'
+    x-google-jwks_uri:
+      value: '${api_auth0_jwksUri}'
+security:
+  - auth0_jwk: []
+x-components: {}
+x-google-backend:
+  address: '${backend_url}'
+
